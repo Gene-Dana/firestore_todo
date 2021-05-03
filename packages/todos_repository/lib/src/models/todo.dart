@@ -9,7 +9,7 @@ class Todo {
   final String task;
 
   Todo(this.task, {this.complete = false, String note = '', String? id})
-      : this.note = note ?? '',
+      : this.note = note,
         this.id = id;
 
   Todo copyWith({bool? complete, String? id, String? note, String? task}) {

@@ -48,20 +48,20 @@ class FilteredTodoView extends StatelessWidget {
                   );
                 },
                 onTap: () async {
-                  final removedTodo = await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) {
-                      return DetailsScreen(id: todo.id);
-                    }),
-                  );
-                  if (removedTodo != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      DeleteTodoSnackBar(
-                        todo: todo,
-                        onUndo: () => BlocProvider.of<TodosBloc>(context)
-                            .add(AddTodo(todo)),
-                      ),
-                    );
-                  }
+                  // final removedTodo = await Navigator.of(context).push(
+                  //   MaterialPageRoute(builder: (_) {
+                  //     return DetailsScreen(id: todo.id);
+                  //   }),
+                  // );
+                  // if (removedTodo != null) {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     DeleteTodoSnackBar(
+                  //       todo: todo,
+                  //       onUndo: () => BlocProvider.of<TodosBloc>(context)
+                  //           .add(AddTodo(todo)),
+                  //     ),
+                  //   );
+                  // }
                 },
                 onCheckboxChanged: (_) {
                   BlocProvider.of<TodosBloc>(context).add(

@@ -1,41 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../app/app.dart';
 import '../../home/home.dart';
+import '../../filtered_todos/filtered_todos.dart';
+import '../../stats/stats.dart';
+import '../../todos/todos.dart';
+import 'package:todos_repository/todos_repository.dart';
 
 class HomePage extends StatelessWidget {
   static Page page() => MaterialPage<void>(child: HomePage());
 
+  final _todosRepository = FirebaseTodosRepository();
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final user = context.select((AppBloc bloc) => bloc.state.user);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          InkWell(
-            child: Avatar(photo: user.photo),
-            onTap: () {},
-          ),
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => context.read<AppBloc>().add(AppLogoutRequested()),
-          )
-        ],
+    return RepositoryProvider.value(
+      value: _todosRepository,
+      child: BlocProvider(
+        create: (_) => TodosBloc(
+          todosRepository: _todosRepository,
+        )..add(LoadTodos()),
+        child: HomeScreen(),
       ),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Avatar(photo: user.photo),
-            const SizedBox(height: 4.0),
-            Text(user.id),
-          ],
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeTabBloc>(
+          create: (context) => HomeTabBloc(),
         ),
-      ),
+        BlocProvider<FilteredTodosBloc>(
+          create: (context) => FilteredTodosBloc(
+            todosBloc: BlocProvider.of<TodosBloc>(context),
+          ),
+        ),
+        BlocProvider<StatsBloc>(
+          create: (context) => StatsBloc(
+            todosBloc: BlocProvider.of<TodosBloc>(context),
+          ),
+        ),
+      ],
+      child: HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeTabBloc, AppTab>(
+      builder: (context, activeTab) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Firestore Todos'),
+            actions: [
+              FilterButton(visible: activeTab == AppTab.todos),
+              ExtraActions(),
+            ],
+          ),
+          body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/addTodo');
+            },
+            child: Icon(Icons.add),
+            tooltip: 'Add Todo',
+          ),
+          bottomNavigationBar: TabSelector(
+            activeTab: activeTab,
+            onTabSelected: (tab) =>
+                BlocProvider.of<HomeTabBloc>(context).add(UpdateHomeTab(tab)),
+          ),
+        );
+      },
     );
   }
 }

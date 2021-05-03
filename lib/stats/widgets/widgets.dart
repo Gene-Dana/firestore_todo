@@ -1,2 +1,2 @@
-export './stats.dart';
+export '../view/stats.dart';
 export './loading_indicator.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const _avatarSize = 24.0;
 
 class Avatar extends StatelessWidget {
-  const Avatar({Key? key, this.photo}) : super(key: key);
+  const Avatar({Key? key, required this.photo}) : super(key: key);
 
   final String? photo;
 
@@ -12,10 +12,9 @@ class Avatar extends StatelessWidget {
     final photo = this.photo;
     return CircleAvatar(
       radius: _avatarSize,
-      backgroundImage: photo != null ? NetworkImage(photo) : null,
-      child: photo == null
-          ? const Icon(Icons.person_outline, size: _avatarSize)
-          : null,
+      // This is a weird problem .. How would I solve?
+      backgroundImage: NetworkImage(photo!),
+      // child: const Icon(Icons.person_outline, size: _avatarSize),
     );
   }
 }
