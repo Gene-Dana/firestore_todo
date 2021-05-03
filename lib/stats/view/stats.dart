@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../stats.dart';
-import 'package:bloc/bloc.dart';
+import '../../todos/todos.dart';
 
 class Stats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => StatsBloc(),
+      create: (_) => StatsBloc(
+        todosBloc: BlocProvider.of<TodosBloc>(context),
+      ),
       child: StatsView(),
     );
   }

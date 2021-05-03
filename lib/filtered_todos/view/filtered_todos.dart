@@ -13,6 +13,18 @@ class FilteredTodos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => FilteredTodosBloc(
+        todosBloc: BlocProvider.of<TodosBloc>(context),
+      ),
+      child: FilteredTodoView(),
+    );
+  }
+}
+
+class FilteredTodoView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<FilteredTodosBloc, FilteredTodosState>(
       builder: (context, state) {
         if (state is FilteredTodosLoading) {
