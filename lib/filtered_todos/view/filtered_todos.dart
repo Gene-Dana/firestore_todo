@@ -48,6 +48,7 @@ class FilteredTodoView extends StatelessWidget {
                   );
                 },
                 onTap: () async {
+                  print('todo: $todo');
                   // final removedTodo = await Navigator.of(context).push(
                   //   MaterialPageRoute(builder: (_) {
                   //     return DetailsScreen(id: todo.id);

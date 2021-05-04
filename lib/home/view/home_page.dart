@@ -65,7 +65,8 @@ class HomeView extends StatelessWidget {
           body: activeTab == AppTab.todos ? FilteredTodos() : Stats(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/addTodo');
+              // Navigator.pushNamed(context, '/addTodo');
+              print('pushed');
             },
             child: Icon(Icons.add),
             tooltip: 'Add Todo',
