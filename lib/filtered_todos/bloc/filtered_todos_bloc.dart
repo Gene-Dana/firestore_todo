@@ -11,7 +11,7 @@ part 'filtered_todos_state.dart';
 
 class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
   final TodosBloc _todosBloc;
-  late StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
   FilteredTodosBloc({required TodosBloc todosBloc})
       : _todosBloc = todosBloc,
@@ -79,7 +79,7 @@ class FilteredTodosBloc extends Bloc<FilteredTodosEvent, FilteredTodosState> {
 
   @override
   Future<void> close() {
-    _todosSubscription.cancel();
+    _todosSubscription?.cancel();
     return super.close();
   }
 }

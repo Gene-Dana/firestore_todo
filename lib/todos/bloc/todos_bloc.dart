@@ -9,7 +9,7 @@ part 'todos_state.dart';
 
 class TodosBloc extends Bloc<TodosEvent, TodosState> {
   final TodosRepository _todosRepository;
-  late StreamSubscription _todosSubscription;
+  StreamSubscription? _todosSubscription;
 
   TodosBloc({required TodosRepository todosRepository})
       : _todosRepository = todosRepository,
@@ -37,7 +37,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
   }
 
   Stream<TodosState> _mapLoadTodosToState() async* {
-    _todosSubscription.cancel();
+    _todosSubscription?.cancel();
     _todosSubscription = _todosRepository.todos().listen(
           (todos) => add(TodosUpdated(todos)),
         );
@@ -85,7 +85,7 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
 
   @override
   Future<void> close() {
-    _todosSubscription.cancel();
+    _todosSubscription?.cancel();
     return super.close();
   }
 }
